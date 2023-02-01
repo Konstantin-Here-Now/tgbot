@@ -4,6 +4,7 @@ from aiogram import Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, CallbackQuery
 
+from parties.party_dict import PARTY_DICT
 from tgbot.keyboards.inline import question_age_keyboard, question_party_keyboard
 from tgbot.misc.states import QuestSelection
 
@@ -41,10 +42,17 @@ async def ask_party_type(call: CallbackQuery, state: FSMContext):
 
 
 async def show_parties(call: CallbackQuery, state: FSMContext):
+    await write_answer(callback=call, state=state, state_step='party_type')
+    state_data = await state.get_data()
+    age = state_data.get('age')
+    party_type = state_data.get('party_type')
+    party = PARTY_DICT.get((age, party_type))
     await call.message.answer(
-        text="Посмотрите на этот квест:\n"
-             "example.com")
-    await call.message.answer_photo(photo=open(r'photo/cat1.jpeg', "rb"))
+        text=f"Посмотрите на этот квест:\n"
+             f"{party.get('name')}\n"
+             "URL: example.com")
+    await call.message.answer_photo(photo=open(party.get('photo'), "rb"))
+    await state.finish()
 
 
 async def cancel(call: CallbackQuery, state: FSMContext):
