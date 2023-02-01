@@ -10,7 +10,7 @@ async def bot_echo(message: types.Message):
         message.text
     ]
 
-    await message.answer('\n'.join(text))
+    await message.answer(text='\n'.join(text))
 
 
 async def bot_echo_all(message: types.Message, state: FSMContext):
@@ -20,7 +20,7 @@ async def bot_echo_all(message: types.Message, state: FSMContext):
         'Содержание сообщения:',
         hcode(message.text)
     ]
-    await message.answer('\n'.join(text))
+    await message.answer(text='\n'.join(text))
 
 
 def register_echo(dp: Dispatcher):
