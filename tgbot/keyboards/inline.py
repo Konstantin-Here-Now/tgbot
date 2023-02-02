@@ -1,7 +1,5 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from tgbot.keyboards.callback_datas import ask_age_callback
-
 question_age_keyboard = InlineKeyboardMarkup(row_width=2,
                                              inline_keyboard=[
                                                  [InlineKeyboardButton(text='5-7 лет',

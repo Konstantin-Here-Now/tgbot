@@ -28,13 +28,9 @@ async def select_party_ask_age(message: Message):
 
 async def ask_party_type(call: CallbackQuery, state: FSMContext):
     await write_answer(callback=call, state=state, state_step='age')
-    # await call.answer(f"Вы выбрали {answer}")  # Всплывает окно посреди экрана пользователя
+    await call.message.edit_reply_markup()  # Deletes keyboard
+    await call.answer(f"Вы выбрали {call.data}!")
     # logging.info(f'callback_data = {answer}')
-
-    # -------- ДЛЯ ТЕСТОВ --------
-    # data = await state.get_data()
-    # await call.answer(data.get('age'))
-
     await call.message.answer(
         text="По какому поводу планируется праздник?",
         reply_markup=question_party_keyboard)
@@ -43,16 +39,21 @@ async def ask_party_type(call: CallbackQuery, state: FSMContext):
 
 async def show_parties(call: CallbackQuery, state: FSMContext):
     await write_answer(callback=call, state=state, state_step='party_type')
+    await call.message.edit_reply_markup()  # Deletes keyboard
+    await call.answer(f"Вы выбрали {call.data}!")
     state_data = await state.get_data()
     age = state_data.get('age')
     party_type = state_data.get('party_type')
     party = PARTY_DICT.get((age, party_type))
     await call.message.answer(
         text=f"Посмотрите на этот квест:\n"
-             f"{party.get('name')}\n"
+             f"{party['name']}\n"
              "URL: example.com")
     await call.message.answer_photo(photo=open(party.get('photo'), "rb"))
     await state.finish()
+    await call.message.answer('Чтобы забронировать квест и узнать более подробную информацию о деталях организации '
+                              'праздника, напишите нам в личные сообщения @kvestpskov и мы ответим вам в ближайшее '
+                              'время.')
 
 
 async def cancel(call: CallbackQuery, state: FSMContext):
