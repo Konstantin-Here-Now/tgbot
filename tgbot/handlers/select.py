@@ -62,8 +62,14 @@ async def cancel(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup()
 
 
+async def another(call: CallbackQuery, state: FSMContext):
+    # Ввод пользователя с клавиатуры
+    pass
+
+
 def register_quest_selection(dp: Dispatcher):
     dp.register_message_handler(select_party_ask_age, commands=["select"])
     dp.register_callback_query_handler(cancel, text='cancel', state="*")
+    dp.register_callback_query_handler(another, text='another', state="*")
     dp.register_callback_query_handler(ask_party_type, state=QuestSelection.age)
     dp.register_callback_query_handler(show_parties, state=QuestSelection.party_type)

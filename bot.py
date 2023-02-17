@@ -9,6 +9,7 @@ from tgbot.config import load_config
 from tgbot.filters.admin import AdminFilter
 from tgbot.handlers.admin import register_admin
 from tgbot.handlers.echo import register_echo
+from tgbot.handlers.quests import register_show_quests
 from tgbot.handlers.select import register_quest_selection
 from tgbot.handlers.testing import register_testing
 from tgbot.handlers.user import register_user
@@ -27,6 +28,7 @@ def register_all_filters(dp):
 
 def register_all_handlers(dp):
     register_admin(dp)
+    register_show_quests(dp)
     register_quest_selection(dp)
     register_user(dp)
     register_testing(dp)
