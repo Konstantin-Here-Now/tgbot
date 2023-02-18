@@ -9,6 +9,10 @@ from tgbot.keyboards.inline import question_age_keyboard, question_party_keyboar
 from tgbot.misc.states import QuestSelection
 
 
+async def user_info(message: Message):
+    return message.chat.username
+
+
 async def write_answer(callback: CallbackQuery, state: FSMContext, state_step: str):
     """
     Writes down answer from CallbackQuery into a particular state_step in state
@@ -19,6 +23,7 @@ async def write_answer(callback: CallbackQuery, state: FSMContext, state_step: s
 
 
 async def select_party_ask_age(message: Message):
+    logging.info(f'User {await user_info(message)} started quest selection.')
     await message.answer(
         text="Я помогу вам подобрать квест для вашего праздника. Для этого мне нужно задать вам несколько вопросов.\n"
              "Какой возраст участников?",
@@ -29,8 +34,8 @@ async def select_party_ask_age(message: Message):
 async def ask_party_type(call: CallbackQuery, state: FSMContext):
     await write_answer(callback=call, state=state, state_step='age')
     await call.message.edit_reply_markup()  # Deletes keyboard
+    logging.info(f'User {await user_info(call.message)} has chosen {call.data}.')
     await call.answer(f"Вы выбрали {call.data}!")
-    # logging.info(f'callback_data = {answer}')
     await call.message.answer(
         text="По какому поводу планируется праздник?",
         reply_markup=question_party_keyboard)
@@ -40,6 +45,7 @@ async def ask_party_type(call: CallbackQuery, state: FSMContext):
 async def show_parties(call: CallbackQuery, state: FSMContext):
     await write_answer(callback=call, state=state, state_step='party_type')
     await call.message.edit_reply_markup()  # Deletes keyboard
+    logging.info(f'User {await user_info(call.message)} has chosen {call.data}.')
     await call.answer(f"Вы выбрали {call.data}!")
     state_data = await state.get_data()
     age = state_data.get('age')
@@ -57,6 +63,7 @@ async def show_parties(call: CallbackQuery, state: FSMContext):
 
 
 async def cancel(call: CallbackQuery, state: FSMContext):
+    logging.info(f'User {await user_info(call.message)} cancelled quest selection.')
     await call.answer('Вы отменили подбор квеста.', show_alert=True)
     await state.finish()
     await call.message.edit_reply_markup()

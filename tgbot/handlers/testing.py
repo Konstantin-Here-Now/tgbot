@@ -1,4 +1,5 @@
 # Only for tests
+import logging
 
 from aiogram import Dispatcher
 from aiogram.dispatcher import FSMContext
@@ -8,6 +9,8 @@ from tgbot.misc.states import Test
 
 
 async def enter_test(message: Message):
+    logger = logging.getLogger(__name__)
+    print("Это логгер: ", logger)
     await message.answer(
         text="Вы начали тестирование.\n"
              "Вопрос 1: вы человек?")

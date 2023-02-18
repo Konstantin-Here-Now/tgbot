@@ -7,6 +7,7 @@ from parties.party_dict import PARTIES
 
 
 async def show_quests(message: Message):
+    logging.info(f'User { message.chat.username} requested all quests.')
     await message.answer(
         text="Взгляните на доступные квесты:")
     for party in PARTIES:
