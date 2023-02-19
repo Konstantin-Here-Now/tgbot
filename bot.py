@@ -4,6 +4,7 @@ import logging
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
+from aiogram.types import BotCommand
 
 from tgbot.config import load_config
 from tgbot.filters.admin import AdminFilter
@@ -55,6 +56,11 @@ async def main():
     register_all_middlewares(dp, config)
     register_all_filters(dp)
     register_all_handlers(dp)
+
+    await bot.set_my_commands([
+        BotCommand('select', 'Выбрать квест'),
+        BotCommand('quests', 'Показать все квесты')
+    ])
 
     # start
     try:
